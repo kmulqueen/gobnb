@@ -36,9 +36,61 @@ function Prompt() {
     });
   };
 
+  let datePick = async function (c) {
+    const {
+      text = "",
+      title = "",
+      html = `
+      <form id="check-availability-form" action="" method="POST" novalidate class="needs-validation">
+        <div class="row">
+          <div class="col">
+            <div class="row reservation-dates-modal">
+              <div class="col">
+                <input disabled required class="form-control date-pick-start" type="text" name="start" placeholder="Arrival" />
+              </div>
+              <div class="col">
+                <input disabled required class="form-control date-pick-end" type="text" name="end" placeholder="Departure" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    `,
+    } = c;
+
+    const { value: formValues } = await Swal.fire({
+      title: title,
+      html: html,
+      focusConfirm: false,
+      showCancelButton: true,
+      backdrop: false,
+      willOpen: () => {
+        const elem = document.querySelector(".reservation-dates-modal");
+        const rangePicker = new DateRangePicker(elem, {
+          showOnFocus: true,
+        });
+      },
+      didOpen: () => {
+        document.querySelector(".date-pick-start").removeAttribute("disabled");
+        document.querySelector(".date-pick-end").removeAttribute("disabled");
+      },
+      preConfirm: () => {
+        return [
+          document.querySelector(".date-pick-start").value,
+          document.querySelector(".date-pick-end").value,
+        ];
+      },
+    });
+
+    if (formValues) {
+      Swal.fire(JSON.stringify(formValues));
+    }
+  };
+
   return {
     toast: toast,
     modal: modal,
+    datePick: datePick,
   };
 }
 
@@ -83,4 +135,7 @@ function notify(type, message) {
     text: message,
   });
 }
-attention.modal("Heyyyy");
+
+document.querySelector(".test-btn").addEventListener("click", () => {
+  attention.datePick({});
+});
