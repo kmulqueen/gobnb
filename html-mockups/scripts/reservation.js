@@ -1,3 +1,4 @@
+//* ============================= Form Validation =============================
 // Disabling form submissions if there are invalid fields
 (function () {
   "use strict";
@@ -22,8 +23,17 @@
   });
 })();
 
-// Date range picker
+//* ============================= Date Range Picker =============================
 const elem = document.querySelector(".date-range-picker");
 const rangepicker = new DateRangePicker(elem, {
   // ...options
 });
+
+//* ============================= Notie Alerts =============================
+// type is optional. options are 'success', 'warning', 'error', 'info', 'neutral'
+function notify(type, message) {
+  notie.alert({
+    type: type,
+    text: message,
+  });
+}
