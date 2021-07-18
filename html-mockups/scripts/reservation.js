@@ -1,3 +1,49 @@
+//* ============================= Prompt/Modal Function Access =============================
+/**
+ * * Prompt uses sweet alert modals
+ */
+function Prompt() {
+  let toast = function (title, icon = "success", position = "top-end") {
+    const Toast = Swal.mixin({
+      toast: true,
+      position,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+    });
+
+    Toast.fire({
+      title,
+      icon,
+    });
+  };
+
+  let modal = function (
+    title,
+    text,
+    type = "success",
+    confirmButtonText = "OK"
+  ) {
+    Swal.fire({
+      title,
+      text,
+      icon: type,
+      confirmButtonText,
+    });
+  };
+
+  return {
+    toast: toast,
+    modal: modal,
+  };
+}
+
+let attention = Prompt();
+
 //* ============================= Form Validation =============================
 // Disabling form submissions if there are invalid fields
 (function () {
@@ -37,3 +83,4 @@ function notify(type, message) {
     text: message,
   });
 }
+attention.modal("Heyyyy");
