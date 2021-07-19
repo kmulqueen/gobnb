@@ -1,0 +1,36 @@
+{{template "base" .}}
+
+{{define "content"}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <img src="/static/images/generals-quarters.png" class="img-fluid mx-auto d-block room-img img-thumbnail"
+                alt="room 1">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center">Room 1</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat nostrum laborum ducimus? Quae nam
+                eos delectus nobis dicta omnis similique dolores optio, neque praesentium iure ex ipsam, placeat
+                commodi in!</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+            <a href="#!" class="btn btn-success check-availability-btn">Check Availibity</a>
+        </div>
+    </div>
+
+</div>
+{{end}}
+
+{{define "js"}}
+<script>
+    document.querySelector(".check-availability-btn").addEventListener("click", function () {
+        attention.datePick({});
+    })
+</script>
+{{end}}

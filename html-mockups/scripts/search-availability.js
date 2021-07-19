@@ -135,7 +135,3 @@ function notify(type, message) {
     text: message,
   });
 }
-
-document.querySelector(".test-btn").addEventListener("click", () => {
-  attention.datePick({});
-});

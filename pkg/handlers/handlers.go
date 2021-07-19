@@ -57,3 +57,19 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	// Send the data to the template
 	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{StringMap: stringMap})
 }
+
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "make-reservation.page.tmpl", &models.TemplateData{})
+}
+func (m *Repository) Room1(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "room1.page.tmpl", &models.TemplateData{})
+}
+func (m *Repository) Room2(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "room2.page.tmpl", &models.TemplateData{})
+}
+func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "search-availability.page.tmpl", &models.TemplateData{})
+}
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{})
+}

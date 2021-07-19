@@ -1,0 +1,38 @@
+{{template "base" .}}
+
+{{define "content"}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="mt-5">Search for Availability</h1>
+            <form action="" method="POST" novalidate class="needs-validation">
+                <div class="date-range-picker row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="start" class="form-label">Starting Date</label>
+                            <input required class="form-control mb-3" type="text" name="start">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="end" class="form-label">Ending Date</label>
+                            <input required class="form-control mb-3" type="text" name="end">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Search Availability</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "js"}}
+<script>
+    //* ============================= Date Range Picker =============================
+    const elem = document.querySelector(".date-range-picker");
+    const rangepicker = new DateRangePicker(elem, {
+        // ...options
+    });
+</script>
+{{end}}
