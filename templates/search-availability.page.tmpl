@@ -5,7 +5,8 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h1 class="mt-5">Search for Availability</h1>
-            <form action="" method="POST" novalidate class="needs-validation">
+            <form action="/search-availability" method="POST" novalidate class="needs-validation">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
                 <div class="date-range-picker row">
                     <div class="col">
                         <div class="form-group">
