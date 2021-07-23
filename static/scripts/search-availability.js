@@ -38,8 +38,7 @@ function Prompt() {
 
   let datePick = async function (c) {
     const {
-      text = "",
-      title = "",
+      title = "Choose Your Dates",
       html = `
       <form id="check-availability-form" action="" method="POST" novalidate class="needs-validation">
         <div class="row">
@@ -83,7 +82,64 @@ function Prompt() {
     });
 
     if (formValues) {
-      Swal.fire(JSON.stringify(formValues));
+      if (formValues.dismiss !== Swal.DismissReason.cancel) {
+        if (formValues.value !== "") {
+          if (c.callback !== undefined) {
+            c.callback(formValues);
+          }
+        } else {
+          c.callback(false);
+        }
+      } else {
+        c.callback(false);
+      }
+    }
+  };
+
+  let custom = async function (c) {
+    const {
+      title = "",
+      html = "",
+      willOpen = undefined,
+      didOpen = undefined,
+      preConfirm = undefined,
+    } = c;
+
+    const { value: formValues } = await Swal.fire({
+      title: title,
+      html: html,
+      focusConfirm: false,
+      showCancelButton: true,
+      backdrop: false,
+      willOpen: () => {
+        if (willOpen !== undefined) {
+          willOpen();
+        }
+      },
+      didOpen: () => {
+        if (didOpen !== undefined) {
+          didOpen();
+        }
+      },
+      preConfirm: () => {
+        if (preConfirm !== undefined) {
+          preConfirm();
+        }
+      },
+    });
+
+    if (formValues) {
+      if (formValues.dismiss !== Swal.DismissReason.cancel) {
+        if (formValues.value !== "") {
+          if (c.callback !== undefined) {
+            c.callback(formValues);
+          }
+        } else {
+          c.callback(false);
+        }
+      } else {
+        c.callback(false);
+      }
     }
   };
 
@@ -91,6 +147,7 @@ function Prompt() {
     toast: toast,
     modal: modal,
     datePick: datePick,
+    custom: custom,
   };
 }
 
