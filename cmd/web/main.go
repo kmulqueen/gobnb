@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/kmulqueen/gobnb/pkg/config"
-	"github.com/kmulqueen/gobnb/pkg/handlers"
-	"github.com/kmulqueen/gobnb/pkg/render"
+	"github.com/kmulqueen/gobnb/internal/config"
+	"github.com/kmulqueen/gobnb/internal/handlers"
+	"github.com/kmulqueen/gobnb/internal/render"
 )
 
 // Variables available to entire main package

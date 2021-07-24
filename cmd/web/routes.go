@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/kmulqueen/gobnb/pkg/config"
-	"github.com/kmulqueen/gobnb/pkg/handlers"
+	"github.com/kmulqueen/gobnb/internal/config"
+	"github.com/kmulqueen/gobnb/internal/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {

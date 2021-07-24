@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/kmulqueen/gobnb/internal/config"
+	"github.com/kmulqueen/gobnb/internal/render"
 	"github.com/kmulqueen/gobnb/models"
-	"github.com/kmulqueen/gobnb/pkg/config"
-	"github.com/kmulqueen/gobnb/pkg/render"
 )
 
 // Repo is the repository used by the handlers
