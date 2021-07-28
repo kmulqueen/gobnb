@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/kmulqueen/gobnb/internal/config"
+	"github.com/kmulqueen/gobnb/internal/forms"
 	"github.com/kmulqueen/gobnb/internal/render"
 	"github.com/kmulqueen/gobnb/models"
 )
@@ -61,18 +62,61 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{StringMap: stringMap})
 }
 
+// Reservation renders the make reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 }
+
+// PostReservation handles the posting of a reservation form
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first-name"),
+		LastName: r.Form.Get("last-name"),
+		Email: r.Form.Get("email"),
+		Phone: r.Form.Get("phone-number"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	form.Has("first-name", r)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+
+		return
+	}
+}
+
+// Room1 renders the room 1 page
 func (m *Repository) Room1(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "room1.page.tmpl", &models.TemplateData{})
 }
+
+// Room2 renders the room 2 page
 func (m *Repository) Room2(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "room2.page.tmpl", &models.TemplateData{})
 }
+
+// Availability renders the search availability page
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
+
+// PostAvailability handles searching for availability given start & end dates
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
