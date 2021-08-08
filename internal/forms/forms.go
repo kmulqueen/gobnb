@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/asaskevich/govalidator"
@@ -58,5 +59,13 @@ func (f *Form) MinLength(field string, length int, r *http.Request) bool {
 func (f *Form) IsEmail(field string) {
 	if !govalidator.IsEmail(f.Get(field)) {
 		f.Errors.Add(field, "Invalid email address.")
+	}
+}
+
+func (f *Form) IsPhone(field string, r *http.Request) {
+	re := regexp.MustCompile(`^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$`)
+	x := r.Form.Get(field)
+	if !re.MatchString(x) {
+		f.Errors.Add(field, "Invalid phone number.")
 	}
 }
