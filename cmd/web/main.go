@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"github.com/kmulqueen/gobnb/internal/config"
 	"github.com/kmulqueen/gobnb/internal/handlers"
 	"github.com/kmulqueen/gobnb/internal/render"
+	"github.com/kmulqueen/gobnb/models"
 )
 
 // Variables available to entire main package
@@ -20,6 +22,8 @@ var session *scs.SessionManager
 
 // main is the main application function
 func main() {
+	// What to store in session
+	gob.Register(models.Reservation{})
 
 	// Change to true when in production
 	app.InProduction = false
@@ -47,7 +51,7 @@ func main() {
 
 	render.NewTemplates(&app)
 
-	fmt.Printf("Starting app o port %s", port)
+	fmt.Printf("Starting app on port %s", port)
 
 	srv := &http.Server{
 		Addr:    port,
