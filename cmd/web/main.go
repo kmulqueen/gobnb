@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/kmulqueen/gobnb/internal/config"
 	"github.com/kmulqueen/gobnb/internal/handlers"
+	"github.com/kmulqueen/gobnb/internal/helpers"
 	"github.com/kmulqueen/gobnb/internal/render"
 	"github.com/kmulqueen/gobnb/models"
 )
@@ -19,6 +21,8 @@ const port = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // main is the main application function
 func main() {
@@ -45,6 +49,13 @@ func run() error {
 	// Change to true when in production
 	app.InProduction = false
 
+	// Set up loggers
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	// Initialize a new session & set the lifetime to 24 hours
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -66,7 +77,8 @@ func run() error {
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
-
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
+	
 	return nil
 }
