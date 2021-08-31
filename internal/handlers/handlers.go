@@ -6,9 +6,12 @@ import (
 	"net/http"
 
 	"github.com/kmulqueen/gobnb/internal/config"
+	"github.com/kmulqueen/gobnb/internal/driver"
 	"github.com/kmulqueen/gobnb/internal/forms"
 	"github.com/kmulqueen/gobnb/internal/helpers"
 	"github.com/kmulqueen/gobnb/internal/render"
+	"github.com/kmulqueen/gobnb/internal/repository"
+	"github.com/kmulqueen/gobnb/internal/repository/dbrepo"
 	"github.com/kmulqueen/gobnb/models"
 )
 
@@ -18,12 +21,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB: dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 

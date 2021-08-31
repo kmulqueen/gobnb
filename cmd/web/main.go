@@ -9,7 +9,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/joho/godotenv"
 	"github.com/kmulqueen/gobnb/internal/config"
+	"github.com/kmulqueen/gobnb/internal/driver"
 	"github.com/kmulqueen/gobnb/internal/handlers"
 	"github.com/kmulqueen/gobnb/internal/helpers"
 	"github.com/kmulqueen/gobnb/internal/render"
@@ -26,10 +28,11 @@ var errorLog *log.Logger
 
 // main is the main application function
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.SQL.Close()
 
 	fmt.Printf("Starting app on port %s", port)
 
@@ -42,7 +45,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// What to store in session
 	gob.Register(models.Reservation{})
 
@@ -66,19 +69,40 @@ func run() error {
 	// Set session in config to session we just initialized
 	app.Session = session
 
+	// Connect to database
+	log.Println("Loading .env file")
+	err := godotenv.Load()
+  	if err != nil {
+    	log.Fatal("Error loading .env file")
+  	}
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	
+	log.Println("Connecting to database...")
+	connStr := "host=" + dbHost + " port=" + dbPort + " dbname=" + dbName + " user=" + dbUser + " password=" + dbPassword
+	db, err := driver.ConnectSQL(connStr)
+	if err != nil {
+		log.Fatal("couldn't connect to database.")
+	}
+	log.Println("Connected to database.")
+
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("can't create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 	helpers.NewHelpers(&app)
 	
-	return nil
+	return db, nil
 }
